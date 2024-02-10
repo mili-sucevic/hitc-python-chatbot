@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>headintheclouds ChatBot</title>
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="/static/styles.css">
+    <!-- Link to the external JS file -->
+    <script src="/static/script.js"></script>
+    <!-- Import Roboto font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <!-- Add this line to prevent favicon errors -->
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;,">
+</head>
+<body>
+    <h1>headintheclouds ChatBot</h1>
+    <div id="chat-container">
+        <div id="chat-box"></div>
+        <div id="user-input">
+            <input type="text" id="user-message" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+            <span style="margin-left: 10px;"></span> <!-- Add space between buttons -->
+            <button onclick="clearHistory()">Clear History</button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            var userMessage = document.getElementById("user-message").value;
+            if (userMessage.trim() !== "") {
+                appendMessage("user", userMessage);
+                document.getElementById("user-message").value = "";
+    
+                // Send user message to server
+                fetch("/get_response", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: "user_message=" + encodeURIComponent(userMessage),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    appendMessage("bot", data.response);
+                });
+            }
+        }
+    
+        document.getElementById("user-message").addEventListener("keyup", function (event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+    
+        // Prevent form submission on Enter key press
+        document.getElementById("user-input").addEventListener("submit", function(event) {
+            event.preventDefault();
+            sendMessage();
+        });
+    
+        function appendMessage(sender, message) {
+            var chatBox = document.getElementById("chat-box");
+            var messageDiv = document.createElement("div");
+            messageDiv.className = sender;
+            messageDiv.innerHTML = `<strong>${sender.charAt(0).toUpperCase() + sender.slice(1)}:</strong> ${message}`;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+    </body>
+</html>
