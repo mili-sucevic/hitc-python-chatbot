@@ -20,8 +20,8 @@ Follow these steps to set up and run the project on your local machine:
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/your_github_username/your_project_name.git
-   cd your_project_name
+   git clone git@github.com:mili-sucevic/hitc-python-chatbot.git
+   cd hitc-python-chatbot
 
 2. **Install Dependencies:**
     ```bash
@@ -32,7 +32,7 @@ Follow these steps to set up and run the project on your local machine:
     python app.py
 
 
-### Access the Web Interface:
+#### Access the Web Interface:
 Open your web browser and go to http://localhost:7000/.
 
 4. **Usage**
